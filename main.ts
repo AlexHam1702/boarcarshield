@@ -1,10 +1,11 @@
+let strip: neopixel.Strip = null
 let Display = grove.createDisplay(DigitalPin.P1, DigitalPin.P15)
-let strip = neopixel.create(DigitalPin.P2, 24, NeoPixelMode.RGB)
+let range = neopixel.create(DigitalPin.P2, 24, NeoPixelMode.RGB)
 basic.forever(function () {
-    if (grove.measureInCentimeters(DigitalPin.P0) == 15) {
+    if (grove.measureInCentimeters(DigitalPin.P0) == 25) {
         Display.show(0)
         basic.pause(100)
-        strip.showColor(neopixel.colors(NeoPixelColors.Black))
+        range.showColor(neopixel.colors(NeoPixelColors.Black))
         basic.showLeds(`
             . . . . .
             . . . . .
@@ -15,25 +16,11 @@ basic.forever(function () {
     } else {
         Display.show(grove.measureInCentimeters(DigitalPin.P0))
         basic.pause(100)
+        strip = range.range(grove.measureInCentimeters(DigitalPin.P0) - -1, 3)
         for (let index = 0; index < 4; index++) {
-            strip.showColor(neopixel.colors(NeoPixelColors.Red))
-            basic.showLeds(`
-                # # # # #
-                # . . . #
-                # . . . #
-                # . . . #
-                # # # # #
-                `)
-            basic.pause(300)
-            strip.showColor(neopixel.colors(NeoPixelColors.Black))
-            basic.showLeds(`
-                . . . . .
-                . . . . .
-                . . . . .
-                . . . . .
-                . . . . .
-                `)
-            basic.pause(300)
+            basic.showString("ATTENTION")
+            strip.setPixelColor(255, neopixel.colors(NeoPixelColors.Red))
         }
+        range.showColor(neopixel.colors(NeoPixelColors.Black))
     }
 })
